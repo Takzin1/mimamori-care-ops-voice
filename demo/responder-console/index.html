@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta
+    name="description"
+    content="Mimamori Care Ops synthetic reviewer demo — accountable last-mile Case operations."
+  >
+  <title>Mimamori Care Ops — Responder Console v0.1</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="demo-banner" role="status">
+    SYNTHETIC REVIEWER DEMO · NOT PRODUCTION · NO REAL RESIDENT DATA
+  </div>
+
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">MIMAMORI CARE OPS</p>
+      <h1>Responder Console <span>v0.1</span></h1>
+      <p class="subtitle">見守りのラストワンマイルを、支援完了まで。</p>
+    </div>
+    <div class="operator">
+      <span class="status-dot" aria-hidden="true"></span>
+      <div>
+        <strong>provider-demo</strong>
+        <small>supervisor-demo · synthetic</small>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="summary-grid" aria-label="Queue summary">
+      <article class="metric">
+        <span>ACTIVE CASES</span>
+        <strong id="metric-total">4</strong>
+        <small>現在の対応対象</small>
+      </article>
+      <article class="metric danger">
+        <span>SLA BREACH</span>
+        <strong id="metric-breached">1</strong>
+        <small>期限超過</small>
+      </article>
+      <article class="metric">
+        <span>UNASSIGNED</span>
+        <strong id="metric-unassigned">1</strong>
+        <small>担当未確定</small>
+      </article>
+      <article class="metric">
+        <span>HANDOFF</span>
+        <strong id="metric-handoff">1</strong>
+        <small>引継ぎ待ち</small>
+      </article>
+      <article class="metric">
+        <span>TTC</span>
+        <strong id="metric-ttc">—</strong>
+        <small>Time to Completion</small>
+      </article>
+    </section>
+
+    <section class="workspace">
+      <aside class="queue-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">WORK QUEUE</p>
+            <h2>今、誰が動くべきか</h2>
+          </div>
+          <span class="pill">説明可能な順序</span>
+        </div>
+        <div id="queue-list" class="queue-list"></div>
+      </aside>
+
+      <section class="case-panel">
+        <div class="panel-heading case-heading">
+          <div>
+            <p class="eyebrow">ACTIVE CASE</p>
+            <h2 id="case-id">CASE-DEMO-001</h2>
+          </div>
+          <div class="case-badges">
+            <span id="case-priority" class="badge priority-high">HIGH</span>
+            <span id="case-status" class="badge">NEW</span>
+          </div>
+        </div>
+
+        <div class="responsibility-card">
+          <div>
+            <span class="label">CURRENT OWNER</span>
+            <strong id="case-owner">未割当</strong>
+          </div>
+          <div>
+            <span class="label">HANDOFF TARGET</span>
+            <strong id="case-handoff">—</strong>
+          </div>
+          <div>
+            <span class="label">STALLED STAGE</span>
+            <strong id="case-stage">acknowledge</strong>
+          </div>
+          <div>
+            <span class="label">NEXT DEADLINE</span>
+            <strong id="case-deadline">06:02</strong>
+          </div>
+        </div>
+
+        <div id="breach-box" class="breach-box">
+          <div>
+            <span class="label">SLA BREACH</span>
+            <strong id="case-breach">8分超過</strong>
+          </div>
+          <p>検知そのものではなく、支援工程の滞留を上位表示しています。</p>
+        </div>
+
+        <div class="case-facts">
+          <div>
+            <span class="label">SUBJECT</span>
+            <strong id="case-subject">subject-demo-001</strong>
+          </div>
+          <div>
+            <span class="label">SOURCE</span>
+            <strong id="case-source">non_response</strong>
+          </div>
+          <div>
+            <span class="label">VERSION</span>
+            <strong id="case-version">1</strong>
+          </div>
+          <div>
+            <span class="label">EVIDENCE</span>
+            <strong id="case-evidence">0件</strong>
+          </div>
+        </div>
+
+        <div class="action-zone">
+          <div>
+            <p class="eyebrow">SYNTHETIC FLOW</p>
+            <h3 id="action-title">Caseを確認する</h3>
+            <p id="action-description">
+              dispatcher-demo が未応答Caseを確認し、責任ある対応フローを開始します。
+            </p>
+          </div>
+          <div class="actions">
+            <button id="advance-button" class="primary-button" type="button">
+              確認済みに進める
+            </button>
+            <button id="reset-button" class="secondary-button" type="button">
+              シナリオをリセット
+            </button>
+          </div>
+        </div>
+
+        <div id="completion-card" class="completion-card hidden">
+          <div class="completion-check" aria-hidden="true">✓</div>
+          <div>
+            <span class="label">VERIFIABLE COMPLETION</span>
+            <strong id="completion-outcome">confirmed_safe</strong>
+            <p id="completion-summary">
+              Synthetic phone confirmation completed.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <aside class="timeline-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">CASE EVIDENCE</p>
+            <h2>責任の履歴</h2>
+          </div>
+        </div>
+
+        <div class="metric-strip">
+          <div>
+            <span>TTA</span>
+            <strong id="tta">—</strong>
+          </div>
+          <div>
+            <span>ASSIGN</span>
+            <strong id="assign-time">—</strong>
+          </div>
+          <div>
+            <span>FIRST ACTION</span>
+            <strong id="first-action-time">—</strong>
+          </div>
+          <div>
+            <span>TTC</span>
+            <strong id="ttc">—</strong>
+          </div>
+        </div>
+
+        <ol id="timeline" class="timeline"></ol>
+
+        <div class="boundary-note">
+          <strong>Human-in-the-loop boundary</strong>
+          <p>
+            このdemoではAIは責任者になりません。担当・引継ぎ受諾・支援完了は
+            accountable human actionとして扱います。
+          </p>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <span>Mimamori Care Ops · synthetic reviewer console</span>
+    <span>Detection is upstream. Completion is the product boundary.</span>
+  </footer>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
