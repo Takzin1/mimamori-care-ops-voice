@@ -1,0 +1,50 @@
+name: Bug report
+description: Report a reproducible defect in the Care Operations Core
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include real resident, medical, care, credential, or production evidence data.
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed behavior
+      description: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction
+      description: Minimal synthetic-data reproduction steps.
+    validations:
+      required: true
+  - type: dropdown
+    id: invariant
+    attributes:
+      label: Affected area
+      options:
+        - Case lifecycle
+        - Handoff / ownership
+        - Completion evidence
+        - Tenant isolation
+        - Authorization
+        - Concurrency / persistence
+        - Event replay / metrics
+        - CI / documentation
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: commit
+    attributes:
+      label: Commit / branch
+      placeholder: commit SHA or branch name

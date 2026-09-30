@@ -1,0 +1,76 @@
+name: Voice Preview Live Gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      tenant_id:
+        description: Synthetic Care Ops tenant ID
+        required: true
+        default: tenant-demo
+        type: string
+      locale:
+        description: Voice locale
+        required: true
+        default: ja-JP
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  live-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: voice-preview
+    env:
+      CARE_OPS_API_BASE: ${{ vars.CARE_OPS_PREVIEW_ORIGIN }}
+      CARE_OPS_SUPABASE_URL: ${{ vars.CARE_OPS_SUPABASE_URL }}
+      CARE_OPS_SUPABASE_PUBLISHABLE_KEY: ${{ vars.CARE_OPS_SUPABASE_PUBLISHABLE_KEY }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 24
+
+      - name: Install locked toolchain
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Guard trusted Preview origin
+        run: |
+          node -e '
+            const raw = process.env.CARE_OPS_API_BASE?.trim();
+            if (!raw) throw new Error("CARE_OPS_PREVIEW_ORIGIN repository/environment variable is required");
+            const url = new URL(raw);
+            if (url.protocol !== "https:" || url.username || url.password || url.search || url.hash || (url.pathname && url.pathname !== "/")) {
+              throw new Error("CARE_OPS_PREVIEW_ORIGIN must be an https origin");
+            }
+            if (!url.hostname.endsWith(".vercel.app")) {
+              throw new Error("CARE_OPS_PREVIEW_ORIGIN must use a Vercel Preview hostname");
+            }
+          '
+
+      - name: Mint fresh synthetic bearer
+        env:
+          CARE_OPS_PREVIEW_AUTH_EMAIL: ${{ secrets.CARE_OPS_PREVIEW_AUTH_EMAIL }}
+          CARE_OPS_PREVIEW_AUTH_PASSWORD: ${{ secrets.CARE_OPS_PREVIEW_AUTH_PASSWORD }}
+        run: node scripts/voice-preview-auth.mjs
+
+      - name: Preview readiness
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: npm run voice:probe
+
+      - name: AssemblyAI session boundary
+        env:
+          CARE_OPS_TENANT_ID: ${{ inputs.tenant_id }}
+          CARE_OPS_VOICE_LOCALE: ${{ inputs.locale }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: npm run voice:smoke
+
+      - name: Synthetic Care Ops E2E
+        env:
+          CARE_OPS_TENANT_ID: ${{ inputs.tenant_id }}
+          CARE_OPS_VOICE_LOCALE: ${{ inputs.locale }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: npm run voice:e2e

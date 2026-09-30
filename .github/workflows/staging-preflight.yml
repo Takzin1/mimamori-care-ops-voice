@@ -1,0 +1,40 @@
+name: Staging Preflight
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: HTTPS Care Ops API base URL for synthetic staging
+        required: true
+        type: string
+      console_origin:
+        description: Exact HTTPS Console origin for synthetic staging
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: staging-preflight-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  boundary-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      CARE_OPS_BASE_URL: ${{ inputs.base_url }}
+      CARE_OPS_CONSOLE_ORIGIN: ${{ inputs.console_origin }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 24
+
+      - name: Install locked toolchain
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Run credential-free staging preflight
+        run: npm run preflight:staging
