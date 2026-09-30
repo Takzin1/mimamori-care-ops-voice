@@ -1,0 +1,43 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/care-ops.ts": {
+      "maxDuration": 30,
+      "includeFiles": "src/**/*.ts"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/care-ops/:path*",
+      "destination": "/api/care-ops?__care_ops_path=:path*"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' wss://streaming.assemblyai.com; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'self' https://vercel.com https://*.vercel.com https://vercel.live"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "microphone=(self), camera=(), geolocation=()"
+        }
+      ]
+    }
+  ],
+  "outputDirectory": "public"
+}
