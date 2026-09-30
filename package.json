@@ -1,0 +1,24 @@
+{
+  "name": "mimamori-care-ops",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test tests/*.test.ts",
+    "test:coverage": "node --test --experimental-test-coverage tests/*.test.ts",
+    "test:postgres": "node --test tests/postgres-real.integration.test.ts tests/identity-postgres.integration.test.ts",
+    "test:demo": "node --check demo/responder-console/app.js && node --check demo/voice-ops/live-controller.js && node --check demo/voice-ops/app.js && node --check public/live-controller.js && node --check public/app.js && node --check scripts/voice-live-smoke.mjs && node --check scripts/voice-preview-probe.mjs && node --check scripts/voice-preview-auth.mjs && node --check scripts/voice-live-e2e.mjs",
+    "preflight:staging": "node scripts/staging-preflight.ts",
+    "config:validate": "node scripts/deployment-config-validate.ts",
+    "voice:smoke": "node scripts/voice-live-smoke.mjs",
+    "voice:probe": "node scripts/voice-preview-probe.mjs",
+    "voice:e2e": "node scripts/voice-live-e2e.mjs"
+  },
+  "devDependencies": {
+    "typescript": "5.9.2"
+  }
+}
