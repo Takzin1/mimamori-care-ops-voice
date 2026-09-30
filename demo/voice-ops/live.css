@@ -1,0 +1,152 @@
+.live-panel {
+  margin-bottom: 28px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(18, 21, 27, .88);
+}
+
+.live-panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.live-panel-head .eyebrow {
+  margin-bottom: 4px;
+}
+
+.live-warning {
+  margin: 12px 0 16px;
+  color: var(--amber);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.live-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.live-grid label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.live-grid input,
+.live-grid select {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+}
+
+.live-grid input:focus,
+.live-grid select:focus {
+  border-color: var(--cyan);
+}
+
+.live-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.live-actions .primary,
+.live-actions .secondary {
+  margin-top: 0;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-width: 88px;
+  justify-content: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.status-pill[data-state="listening"] {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.status-pill[data-state="error"] {
+  background: var(--amber-soft);
+  color: var(--amber);
+}
+
+.live-banner {
+  border-bottom-color: #185247;
+  background: #0d2f28;
+  color: #8ff0ca;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: .5;
+}
+
+@media (max-width: 720px) {
+  .live-grid,
+  .live-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.live-proof {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.live-proof > div {
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.live-proof span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.live-proof strong {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.live-proof strong[data-ready="true"] {
+  color: var(--green);
+}
+
+@media (max-width: 720px) {
+  .live-proof {
+    grid-template-columns: 1fr;
+  }
+}

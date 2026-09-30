@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Mimamori Ops Voice demo">
+  <title>Mimamori Ops Voice Demo</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./live.css">
+</head>
+<body>
+  <div id="demo-banner" class="banner">
+    SYNTHETIC DEMO · NO REAL CARE DATA
+  </div>
+
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">MIMAMORI OPS VOICE</p>
+        <h1>声から、次の行動へ。</h1>
+        <p class="lead">
+          ヒヤリハットをCase化し、SOPに基づくNext Actionと
+          人間確認付きの連絡Draftまで一気通貫で支援します。
+        </p>
+      </div>
+      <div class="flow">VOICE → CASE → ACTION → HANDOFF</div>
+    </header>
+
+    <section class="live-panel" aria-label="Live demo controls">
+      <div class="live-panel-head">
+        <div>
+          <p class="eyebrow accent">LIVE MODE</p>
+          <strong>AssemblyAI Realtime接続</strong>
+        </div>
+        <span id="live-status" class="status-pill">idle</span>
+      </div>
+
+      <p class="live-warning">
+        Synthetic persona専用。実在の利用者名・医療情報・介護記録は入力しないでください。
+        Care Ops access token（Protected Previewでは空欄で可）はメモリ上だけで使用し、保存しません。
+      </p>
+
+      <div class="live-grid">
+        <label>
+          API Base
+          <input id="live-api-base" inputmode="url" autocomplete="off">
+        </label>
+        <label>
+          Tenant
+          <input id="live-tenant" value="tenant-demo" autocomplete="off">
+        </label>
+        <label>
+          Locale
+          <select id="live-locale">
+            <option value="ja-JP">日本語</option>
+            <option value="id-ID">Bahasa Indonesia</option>
+          </select>
+        </label>
+        <label>
+          Care Ops access token
+          <input id="live-token" type="password" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <div class="live-actions">
+        <button id="live-start" class="primary">Live micを開始</button>
+        <button id="live-stop" class="secondary" disabled>停止</button>
+      </div>
+
+      <div class="live-proof" aria-label="Live execution evidence">
+        <div>
+          <span>SESSION</span>
+          <strong id="proof-session">not started</strong>
+        </div>
+        <div>
+          <span>CASE</span>
+          <strong id="proof-case">not persisted</strong>
+        </div>
+        <div>
+          <span>OUTBOX</span>
+          <strong id="proof-outbox">not queued</strong>
+        </div>
+      </div>
+    </section>
+
+    <nav class="steps" aria-label="Demo steps">
+      <button class="step active" data-step="0">01 Voice</button>
+      <button class="step" data-step="1">02 Incident</button>
+      <button class="step" data-step="2">03 Next Action</button>
+      <button class="step" data-step="3">04 Borderless</button>
+      <button class="step" data-step="4">05 Confirm</button>
+    </nav>
+
+    <section class="phone" aria-live="polite">
+      <div class="phone-top">
+        <div class="brand">M</div>
+        <strong>Mimamori Ops Voice</strong>
+        <span id="counter">01 / 05</span>
+      </div>
+
+      <div id="screen-0" class="screen active">
+        <p class="eyebrow accent">VOICE CAPTURE</p>
+        <h2>声で状況を伝える</h2>
+        <div class="voice-card">
+          <div class="orb" aria-hidden="true"></div>
+          <strong id="voice-mode-label">● SYNTHETIC ASSEMBLYAI TURN</strong>
+          <p id="live-transcript">
+            「田中さんが立ち上がった時にふらつきました。
+            転倒はしていません。今は座っています。
+            こういう対応、初めてです。どうすればいいですか？」
+          </p>
+        </div>
+        <div class="info-card">
+          <strong>AssemblyAI Realtime boundary</strong>
+          <p>final turnのみをEvidenceとしてOpsへ流します。</p>
+        </div>
+        <button class="primary next">SyntheticでCase化</button>
+      </div>
+
+      <div id="screen-1" class="screen">
+        <p class="eyebrow accent">INCIDENT EXTRACTION</p>
+        <h2>ヒヤリハットをCase化</h2>
+        <div class="chips">
+          <span id="incident-kind" class="chip warning">NEAR MISS</span>
+          <span class="chip">未解決</span>
+        </div>
+        <div class="info-card">
+          <strong>発生事象</strong>
+          <p id="incident-summary">立ち上がり時のふらつき。転倒なし。現在は着座。</p>
+        </div>
+        <div class="info-card">
+          <strong>未確認事項</strong>
+          <p id="incident-unknowns">意識状態 / 痛み / 外傷 / ふらつき継続</p>
+        </div>
+        <div class="evidence">
+          <span>VOICE EVIDENCE</span>
+          <code id="evidence-id">voice_2026_0928_1620</code>
+        </div>
+        <button class="primary next">Next Actionを見る</button>
+      </div>
+
+      <div id="screen-2" class="screen">
+        <p class="eyebrow accent">NEXT ACTION</p>
+        <h2>次にやることが分かる</h2>
+        <span class="chip success">SOP-BASED GUIDANCE</span>
+        <div id="guidance-actions">
+          <div class="action-card">
+            <b>1. 安全を確保</b>
+            <p>無理に立ち上がらせず、安全な姿勢を確保。</p>
+          </div>
+          <div class="action-card">
+            <b>2. 状態を確認</b>
+            <p>意識 / 痛み / 外傷 / ふらつき継続を確認。</p>
+          </div>
+          <div class="action-card">
+            <b>3. 管理者へ共有</b>
+            <p>確認できた事実を事業所ルールに沿って共有。</p>
+          </div>
+        </div>
+        <div class="boundary">
+          <b>AI SAFETY BOUNDARY</b>
+          <p id="boundary-message">診断・緊急度の最終判断は行わず、SOPと人間判断を優先。</p>
+        </div>
+        <button class="primary next">多言語支援を見る</button>
+      </div>
+
+      <div id="screen-3" class="screen">
+        <p class="eyebrow accent">BORDERLESS SUPPORT</p>
+        <h2>母語でNext Action</h2>
+        <div class="chips">
+          <span class="chip">日本語</span>
+          <span id="localized-locale" class="chip success">Bahasa Indonesia</span>
+        </div>
+        <div class="info-card">
+          <strong>入力された発話</strong>
+          <p id="localized-transcript">
+            “Saya kurang paham bahasa Jepang. Pengguna hampir jatuh
+            saat berdiri. Apa yang harus saya lakukan?”
+          </p>
+        </div>
+        <div class="localized">
+          <strong id="localized-heading">LANGKAH BERIKUTNYA</strong>
+          <ol id="localized-actions">
+            <li>Pastikan pengguna tetap duduk dan aman.</li>
+            <li>Periksa kesadaran, nyeri, luka, dan pusing.</li>
+            <li>Laporkan kondisi kepada penanggung jawab.</li>
+          </ol>
+        </div>
+        <div class="info-card">
+          <strong>日本語Caseは同時生成</strong>
+          <p>母語支援と業務記録を分離し、意味を変えずに運用。</p>
+        </div>
+        <button class="primary next">連絡Draftへ</button>
+      </div>
+
+      <div id="screen-4" class="screen">
+        <p class="eyebrow accent">COMMUNICATION</p>
+        <h2>送信前に人が確認する</h2>
+        <span class="chip warning">HUMAN CONFIRM REQUIRED</span>
+        <div class="info-card">
+          <strong>管理者向け</strong>
+          <p id="supervisor-draft">
+            立ち上がり時にふらつき。転倒なし。現在着座。
+            意識・痛み・外傷・ふらつき継続を確認中。
+          </p>
+        </div>
+        <div class="info-card">
+          <strong>ご家族向け</strong>
+          <p id="family-draft">
+            一時的なふらつきが確認されました。転倒はなく、
+            現在は職員が状態を確認しております。
+          </p>
+        </div>
+        <div class="boundary">
+          <b>「この内容で送りますか？」</b>
+          <p>承認されるまで外部送信しません。</p>
+        </div>
+        <button id="approve" class="primary">確認して承認</button>
+        <button id="reset" class="secondary">最初から</button>
+        <p id="result" class="result" hidden>
+          Awaiting human confirmation.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      Voice is an input layer. Accountable human action remains the product boundary.
+    </footer>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
